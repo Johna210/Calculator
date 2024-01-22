@@ -18,11 +18,12 @@
     </head>
     <body>
         <main id="calculator">
-            <div class="display"></div>
+            <div class="display" id="input-display"></div>
+            <div class="display" id="output-display"></div>
             <div class="actions">
-                <i class="fa-solid fa-delete-left clear"></i>
+                <i class="fa-solid fa-delete-left clear" id="delete"></i>
             </div>
-            <div class="buttons">
+            <div class="buttons" id="touch">
                 <div class="row">
                     <div class="button" id="clear">C</div>
                     <div class="button operation" id="bracket">( )</div>
@@ -59,5 +60,7 @@
                 </div>
             </div>
         </main>
+
+        <script src="./index.js"></script>
     </body>
 </html>
