@@ -1,37 +1,60 @@
+// import { parseInput } from "./calculator";
+
 const calculator = document.getElementById("calculator");
 const input = document.getElementById("input-display");
 const output = document.getElementById("output-display");
 const touch = document.getElementById("touch");
+const del = document.getElementById("delete");
 
 const numericRegex = /^\d+(?:\.\d+)?$/;
-let write = false;
 let leftOperand = "";
 let rightOperand = "";
 let stack = [];
-let isBracket = false;
 let isNegated = false;
+let currNum = "";
 
 touch.addEventListener("click", (e) => {
     e.preventDefault();
     const action = e.target.id;
+    if (action !== "touch" && action.length > 0) {
+        if (isNumeric(action)) {
+            if (input.textContent.length >= 16) {
+                input.style.fontSize = "20px";
+            }
+            currNum += action;
+            input.textContent += action;
+        } else if (action === "clear") {
+            input.textContent = "";
+            stack = [];
+        } else if (action) {
+            let op = operations(action);
 
-    if (isNumeric(action)) {
-        input.textContent += action;
-        if (input.textContent.length >= 16) {
-            input.style.fontSize = "20px";
+            if (op === "(" || op === ")") {
+            } else {
+                stack.push(currNum);
+                stack.push(op);
+                currNum = "";
+                input.textContent += op;
+            }
         }
-        console.log(action);
-        stack.push(action);
-    } else if (action === "clear") {
-        input.textContent = "";
-        stack = [];
+
+        const values = parseInput(stack);
+
+        calculate(values[0], values[1]);
+
+        const operators = values[1];
     } else {
-        let op = operations(action);
-        stack.push(op);
-        input.textContent += op;
+        stack[-1] = currNum;
+        input.textContent += currNum;
+        currNum = "";
     }
 
     console.log(stack);
+});
+
+del.addEventListener("click", () => {
+    stack.pop();
+    display();
 });
 
 function operations(value) {
@@ -53,38 +76,14 @@ function operations(value) {
         return "+";
     } else if (value === "subtract") {
         return "-";
-    }
-}
-
-function calculate(list) {
-    let copy = JSON.parse(JSON.stringify(list));
-    if (list.length <= 2) {
+    } else {
         return;
     }
-
-    while (copy.length > 0) {}
 }
 
-function isNumeric(str) {
-    return numericRegex.test(str);
-}
-
-function add(a, b) {
-    return parseInt(a) + parseInt(b);
-}
-
-function substract(a, b) {
-    return parseInt(a) - parseInt(b);
-}
-
-function multiply(a, b) {
-    return parseInt(a) * parseInt(b);
-}
-
-function divide(a, b) {
-    return parseInt(a) / parseInt(b);
-}
-
-function percentage(a) {
-    return parseInt(a) / 100;
+function display() {
+    input.textContent = "";
+    stack.forEach((ele) => {
+        input.textContent += ele;
+    });
 }
