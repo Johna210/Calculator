@@ -88,14 +88,19 @@ body {
 }
 
 .display {
-    color: #f2ba97;
+    display: flex;
+    justify-content: flex-end;
 }
 
 #input-display {
+    color: #f2ba97;
     padding-top: 100px;
-    display: flex;
-    justify-content: flex-end;
     font-size: 40px;
     word-wrap: break-word;
     overflow: hidden;
+}
+
+#output-display {
+    font-size: 30px;
+    color: #725b4c;
 }

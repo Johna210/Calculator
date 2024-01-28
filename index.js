@@ -7,49 +7,50 @@ const touch = document.getElementById("touch");
 const del = document.getElementById("delete");
 
 const numericRegex = /^\d+(?:\.\d+)?$/;
-let leftOperand = "";
-let rightOperand = "";
 let stack = [];
 let isNegated = false;
+
+// For following a number that may or may not be typed fully
 let currNum = "";
+let curr = false;
 
 touch.addEventListener("click", (e) => {
     e.preventDefault();
     const action = e.target.id;
     if (action !== "touch" && action.length > 0) {
+        display();
         if (isNumeric(action)) {
             if (input.textContent.length >= 16) {
                 input.style.fontSize = "20px";
             }
             currNum += action;
             input.textContent += action;
+
+            if (!curr) {
+                stack.push(currNum);
+                curr = true;
+            } else {
+                stack.pop();
+                stack.push(currNum);
+            }
         } else if (action === "clear") {
             input.textContent = "";
-            stack = [];
+            clearInputs();
         } else if (action) {
             let op = operations(action);
 
             if (op === "(" || op === ")") {
+            } else if (op === "=") {
+                equals();
             } else {
-                stack.push(currNum);
+                curr = false;
                 stack.push(op);
                 currNum = "";
                 input.textContent += op;
             }
         }
-
-        const values = parseInput(stack);
-
-        calculate(values[0], values[1]);
-
-        const operators = values[1];
-    } else {
-        stack[-1] = currNum;
-        input.textContent += currNum;
-        currNum = "";
     }
-
-    console.log(stack);
+    displayAnswer(stack);
 });
 
 del.addEventListener("click", () => {
@@ -57,6 +58,7 @@ del.addEventListener("click", () => {
     display();
 });
 
+// For parsing operators from id's
 function operations(value) {
     if (value === "bracket" && !isBracket) {
         isBracket = true;
@@ -76,6 +78,8 @@ function operations(value) {
         return "+";
     } else if (value === "subtract") {
         return "-";
+    } else if (value === "equals") {
+        return "=";
     } else {
         return;
     }
@@ -83,7 +87,47 @@ function operations(value) {
 
 function display() {
     input.textContent = "";
+    input.style.color = "#f2ba97";
     stack.forEach((ele) => {
         input.textContent += ele;
     });
+}
+
+function displayAnswer(stack) {
+    let answer = Answer(stack);
+
+    // Display answer in the output
+    output.textContent = answer;
+}
+
+function Answer(stack) {
+    // Parse the input into operands and operators
+    const values = parseInput(stack);
+
+    operands = values[0];
+    operators = values[1];
+
+    let answer = calculate(operands, operators);
+
+    return answer;
+}
+
+function equals() {
+    let answer = Answer(stack);
+
+    input.textContent = answer;
+    input.style.color = "#8bafcf";
+    stack = [];
+    output.textContent = "";
+
+    // Fill the stack and the current number with the answer
+    stack = [answer];
+    currNum = answer;
+    curr = true;
+}
+
+function clearInputs() {
+    currNum = "";
+    curr = false;
+    stack = [];
 }

@@ -109,12 +109,3 @@ function divide(a, b) {
 function percentage(a) {
     return parseFloat(a) / 100;
 }
-
-const stack = ["243", "+", "48", "*", "2", "-", "1", "*", "10"];
-
-const values = parseInput(stack);
-
-let a = values[0];
-let b = values[1];
-
-console.log(calculate(a, b));
