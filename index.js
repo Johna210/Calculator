@@ -8,15 +8,16 @@ const del = document.getElementById("delete");
 
 const numericRegex = /^\d+(?:\.\d+)?$/;
 let stack = [];
-let isNegated = false;
 
 // For following a number that may or may not be typed fully
 let currNum = "";
 let curr = false;
+let dotStart = false;
 
 touch.addEventListener("click", (e) => {
     e.preventDefault();
     const action = e.target.id;
+    console.log(stack);
     if (action !== "touch" && action.length > 0) {
         display();
         if (isNumeric(action)) {
@@ -42,14 +43,22 @@ touch.addEventListener("click", (e) => {
             if (op === "(" || op === ")") {
             } else if (op === "=") {
                 equals();
+            } else if (op === "-/+") {
+                negation();
+            } else if (op === ".") {
+                dotStart = true;
+                currNum += ".";
+                input.textContent += ".";
             } else {
                 curr = false;
+                dotStart = false;
                 stack.push(op);
                 currNum = "";
                 input.textContent += op;
             }
         }
     }
+    display();
     displayAnswer(stack);
 });
 
@@ -80,6 +89,8 @@ function operations(value) {
         return "-";
     } else if (value === "equals") {
         return "=";
+    } else if (value === "negation") {
+        return "-/+";
     } else {
         return;
     }
@@ -108,7 +119,6 @@ function Answer(stack) {
     operators = values[1];
 
     let answer = calculate(operands, operators);
-
     return answer;
 }
 
