@@ -1,5 +1,3 @@
-// import { parseInput } from "./calculator";
-
 const calculator = document.getElementById("calculator");
 const input = document.getElementById("input-display");
 const output = document.getElementById("output-display");
@@ -17,7 +15,6 @@ let dotStart = false;
 touch.addEventListener("click", (e) => {
     e.preventDefault();
     const action = e.target.id;
-    console.log(stack);
     if (action !== "touch" && action.length > 0) {
         display();
         if (isNumeric(action)) {
@@ -124,14 +121,18 @@ function displayAnswer(stack) {
 }
 
 function Answer(stack) {
-    // Parse the input into operands and operators
-    const values = parseInput(stack);
+    if (stack.length == 1) {
+        return stack[0];
+    } else {
+        // Parse the input into operands and operators
+        const values = parseInput(stack);
 
-    operands = values[0];
-    operators = values[1];
+        operands = values[0];
+        operators = values[1];
 
-    let answer = calculate(operands, operators);
-    return answer;
+        let answer = calculate(operands, operators);
+        return answer;
+    }
 }
 
 function equals() {
@@ -160,6 +161,16 @@ function percentage() {
     ans /= 100;
 
     stack = [ans];
+
+    Answer(stack);
+}
+
+function negation() {
+    let ans = Answer(stack);
+
+    ans *= -1;
+
+    stack = [String(ans)];
 
     Answer(stack);
 }

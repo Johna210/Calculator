@@ -11,8 +11,10 @@ function parseInput(notation) {
     for (let i = 0; i < notation.length; i++) {
         if (isNumeric(notation[i])) {
             operands.push(notation[i]);
-        } else {
+        } else if (notation[i].length == 1) {
             operators.push(notation[i]);
+        } else {
+            operands.push(notation[i]);
         }
     }
 
