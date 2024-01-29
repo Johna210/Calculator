@@ -53,6 +53,8 @@ touch.addEventListener("click", (e) => {
                     stack.pop();
                     stack.push(currNum);
                 }
+            } else if (op === "%") {
+                percentage();
             } else {
                 curr = false;
                 dotStart = false;
@@ -67,9 +69,10 @@ touch.addEventListener("click", (e) => {
 });
 
 del.addEventListener("click", () => {
-    console.log(stack);
+    // removes the last elt from the stack
     stack.pop();
-    console.log(stack);
+
+    // clear all the variables that were on hold
     dotStart = false;
     curr = false;
     currNum = "";
@@ -149,4 +152,14 @@ function clearInputs() {
     currNum = "";
     curr = false;
     stack = [];
+}
+
+function percentage() {
+    let ans = Answer(stack);
+
+    ans /= 100;
+
+    stack = [ans];
+
+    Answer(stack);
 }
