@@ -46,9 +46,13 @@ touch.addEventListener("click", (e) => {
             } else if (op === "-/+") {
                 negation();
             } else if (op === ".") {
-                dotStart = true;
-                currNum += ".";
-                input.textContent += ".";
+                if (!dotStart) {
+                    dotStart = true;
+                    currNum += ".";
+                } else {
+                    stack.pop();
+                    stack.push(currNum);
+                }
             } else {
                 curr = false;
                 dotStart = false;
@@ -63,7 +67,12 @@ touch.addEventListener("click", (e) => {
 });
 
 del.addEventListener("click", () => {
+    console.log(stack);
     stack.pop();
+    console.log(stack);
+    dotStart = false;
+    curr = false;
+    currNum = "";
     display();
 });
 
