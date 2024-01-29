@@ -42,7 +42,7 @@ touch.addEventListener("click", (e) => {
                 equals();
             } else if (op === "-/+") {
                 negation();
-            } else if (op === ".") {
+            } else if (op === "." && !dotStart) {
                 if (!dotStart) {
                     dotStart = true;
                     currNum += ".";
